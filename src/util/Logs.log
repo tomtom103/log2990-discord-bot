@@ -1,0 +1,43 @@
+{"level":"info","message":"17:13 - 5:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"17:13 - 5:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"17:13 - 5:1:2022 | Info: User thom wrote: !ping"}
+{"level":"info","message":"17:13 - 5:1:2022 | Info: User thom wrote: !start 1"}
+{"level":"info","message":"17:13 - 5:1:2022 | Info: Debut du TP ..."}
+{"level":"info","message":"17:13 - 5:1:2022 | Info: User thom wrote: !autolist"}
+{"level":"info","message":"17:13 - 5:1:2022 | Info: User thom wrote: !ticket 101"}
+{"level":"info","message":"17:13 - 5:1:2022 | Info: Ticket ajouté au groupe 101"}
+{"level":"info","message":"17:13 - 5:1:2022 | Info: User thom wrote: !ticket 102"}
+{"level":"info","message":"17:13 - 5:1:2022 | Info: Ticket ajouté au groupe 102"}
+{"level":"info","message":"17:13 - 5:1:2022 | Info: User thom received ticket 101"}
+{"level":"info","message":"17:13 - 5:1:2022 | Info: User thom received ticket 102"}
+{"level":"info","message":"17:14 - 5:1:2022 | Info: User thom wrote: !end"}
+{"level":"info","message":"17:14 - 5:1:2022 | Info: Fin du TP ..."}
+{"level":"info","message":"17:15 - 5:1:2022 | Info: KILLED, cleaning up"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: User thom wrote: !start 1"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: Debut du TP ..."}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: User thom wrote: !ticket 101"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: Ticket ajouté au groupe 101"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: User thom wrote: !ticket 202"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: Ticket ajouté au groupe 202"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: User thom wrote: !ticket 102"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: Ticket ajouté au groupe 102"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: User thom wrote: !next"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: Joined channel: équipe-101, 2 tickets left"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: User thom wrote: !next"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: Joined channel: équipe-102, 1 tickets left"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: User thom wrote: !next"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: Joined channel: équipe-202, 0 tickets left"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: User thom wrote: !next"}
+{"level":"info","message":"17:16 - 5:1:2022 | Info: Joined channel: Salon privé 1, 0 tickets left"}
+{"level":"info","message":"17:17 - 5:1:2022 | Info: User thom wrote: !autolist"}
+{"level":"info","message":"17:17 - 5:1:2022 | Info: User thom wrote: !ticket 2"}
+{"level":"info","message":"17:17 - 5:1:2022 | Info: Ticket ajouté au groupe 2"}
+{"level":"info","message":"17:17 - 5:1:2022 | Info: User thom wrote: !ticket 202"}
+{"level":"info","message":"17:17 - 5:1:2022 | Info: Ticket ajouté au groupe 202"}
+{"level":"info","message":"17:17 - 5:1:2022 | Info: Joined channel: équipe-202, 0 tickets left"}
+{"level":"info","message":"17:17 - 5:1:2022 | Info: User thom wrote: !clear"}
+{"level":"info","message":"17:17 - 5:1:2022 | Info: Bulk deleted 3 messages"}
+{"level":"info","message":"17:17 - 5:1:2022 | Info: User thom wrote: !help"}
+{"level":"info","message":"17:17 - 5:1:2022 | Info: KILLED, cleaning up"}

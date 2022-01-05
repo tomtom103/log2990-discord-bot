@@ -20,8 +20,8 @@ const adminRoles = [
     ID_ROLE_REPETITEUR,
 ];
 
-const defaultVoiceChannelId = isProd ? "926959608596164713" : "926959608596164713"
-const voiceChannelPrefix = "Salon ";
+const defaultVoiceChannelId = isProd ? "926959608596164713" : "927644378632171544"
+const voiceChannelPrefix = "equipe-";
 
 var queue;
 var sessionStarted = false;
@@ -66,28 +66,32 @@ function hasAdminPermissions(member) {
  * @param {import('discord.js').Message<boolean>} message 
  */
 function helpCommand(message) {
-    const embedMessage = new MessageEmbed()
-        .setColor('#F8C300')
-        .setTitle(`${CLASS}: Aide Commandes`)
-        .setDescription('Commandes disponibles avec le bot: ')
-        .setThumbnail(message.guild.iconURL())
-        .addFields(
-            {name: `!ticket <numéro>`, value: `Indiquez votre numéro de groupe et vous serez dans la liste d'attente pour obtenir une réponse à votre question !`, inline: true},
-            {name: `!list`, value: `Affiche la liste des questions en cours`, inline: true},
-            {name: `Liste des commandes administrateurs`, value: `Commandes réservées aux enseignants ci-dessous`},
-            {name: `!autolist`, value: `Affiche la liste des questions en cours (mis à jour constamment)`, inline: true},
-            {name: `!clear`, value: `Vide la liste d'attente des questions`, inline: true},
-            {name: `!next`, value: `Vous dirige vers la conversation du prochain groupe pour gérer le ticket suivant en liste (résout le ticket automatiquement)`, inline: true},
-            {name: `!start <numéro>`, value: `Débute le TP pour la section <numéro> et affiche la liste des tickets (mis à jour constamment)`, inline: true},
-            {name: `!end`, value: `Termine le TP et ferme la liste des tickets`, inline: true},
-        );
-    embedMessage.setTimestamp();
+    try {
+        const embedMessage = new MessageEmbed()
+            .setColor('#F8C300')
+            .setTitle(`${CLASS}: Aide Commandes`)
+            .setDescription('Commandes disponibles avec le bot: ')
+            .setThumbnail(message.guild.iconURL())
+            .addFields(
+                {name: `!ticket <numéro>`, value: `Indiquez votre numéro de groupe et vous serez dans la liste d'attente pour obtenir une réponse à votre question !`, inline: true},
+                {name: `!list`, value: `Affiche la liste des questions en cours`, inline: true},
+                {name: `Liste des commandes administrateurs`, value: `Commandes réservées aux enseignants ci-dessous`},
+                {name: `!autolist`, value: `Affiche la liste des questions en cours (mis à jour constamment)`, inline: true},
+                {name: `!clear`, value: `Vide la liste d'attente des questions`, inline: true},
+                {name: `!next`, value: `Vous dirige vers la conversation du prochain groupe pour gérer le ticket suivant en liste (résout le ticket automatiquement)`, inline: true},
+                {name: `!start <numéro>`, value: `Débute le TP pour la section <numéro> et affiche la liste des tickets (mis à jour constamment)`, inline: true},
+                {name: `!end`, value: `Termine le TP et ferme la liste des tickets`, inline: true},
+            );
+        embedMessage.setTimestamp();
 
-    message.channel.send({ embeds: [embedMessage]}).then((msg) => {
-        setTimeout(() => msg.delete().catch(error), 30 * 60 * 1000);
-    });
+        message.channel.send({ embeds: [embedMessage]}).then((msg) => {
+            setTimeout(() => msg.delete().catch(error), 30 * 60 * 1000);
+        });
 
-    setTimeout(() => message.delete().catch(error), 1000);
+        setTimeout(() => message.delete().catch(error), 1000);
+    } catch (err) {
+        error(err);
+    }
 }
 
 /**
@@ -136,31 +140,37 @@ function ticketCommand(message) {
  * @param {import('discord.js').GuildMember} member 
  */
 function manageNextTicket(member) {
-    if (queue.isEmpty()) {
-        if (member.voice.channel) {
-            // TODO: Find how to get channel id
-            const voice = member.guild.channels.fetch(defaultVoiceChannelId)
-            member.voice.setChannel(voice)
-        }
-
-        return;
-    }
-
-    let nbTicket = queue.pop()[0];
-    if (member.voice.channel) {
-        for (let value of member.guild.channels.cache.values()) {
-            if (value.name === `${voiceChannelPrefix}${nbTicket}`) {
-                member.voice.setChannel(value);
-                log(`Joined channel: ${value.name}, ${queue.size()} tickets left`);
-                break;
+    try {
+        if (queue.isEmpty()) {
+            if (member.voice.channel) {
+                for (let value of member.guild.channels.cache.values()) {
+                    if (value.id === defaultVoiceChannelId && value.type === 'GUILD_VOICE') {
+                        member.voice.setChannel(value);
+                        log(`Joined channel: ${value.name}, ${queue.size()} tickets left`);
+                        break;
+                    }
+                }
             }
+            return;
         }
-    } else {
-        member.user.send(`La prochaine équipe est: ${nbTicket}`);
-        log(`User ${member.user.username} received ticket ${nbTicket}`);
-    }
+    
+        let nbTicket = queue.pop()[0];
+        if (member.voice.channel) {
+            for (let value of member.guild.channels.cache.values()) {
+                if (value.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "") === `${voiceChannelPrefix}${nbTicket}` && value.type === 'GUILD_VOICE') {
+                    member.voice.setChannel(value);
+                    log(`Joined channel: ${value.name}, ${queue.size()} tickets left`);
+                }
+            }
+        } else {
+            member.user.send(`La prochaine équipe est: ${nbTicket}`);
+            log(`User ${member.user.username} received ticket ${nbTicket}`);
+        }
 
-    updateListTicketsEmbed(member);
+        updateListTicketsEmbed(member);
+    } catch (err) {
+        error(err);
+    }
 }
 
 /**
@@ -175,7 +185,7 @@ function manageNextTicketCommand(message) {
             setTimeout(() => message.delete().catch(error), 1000)
 
             message.channel.send("Aucune session est active").then((msg) => {
-                setTimeout(() => msg.delete().catch(error), 10 * 1000)
+                setTimeout(() => msg.delete().catch(error), 10 * 1000);
             });
 
             return;
@@ -184,12 +194,8 @@ function manageNextTicketCommand(message) {
         if (queue.isEmpty()) {
             // Display message and delete it after 10 seconds
             message.channel.send(`Pas de ticket en attente`).then((msg) => {
-                setTimeout(() => msg.delete().catch(error), 10 * 1000)
+                setTimeout(() => msg.delete().catch(error), 10 * 1000);
             });
-
-            message.delete().catch(error);
-
-            return;
         }
 
         manageNextTicket(message.member);
@@ -205,26 +211,30 @@ function manageNextTicketCommand(message) {
  * @param {import('discord.js').Message<boolean>} message 
  */
 function startSessionCommand(message) {
-    if (!hasAdminPermissions(message.member)) return;
+    try {
+        if (!hasAdminPermissions(message.member)) return;
 
-    sessionStarted = true;
+        sessionStarted = true;
 
-    const args = message.content.substring(1).split(" ");
-    const labGroupNb = args[2] ? parseInt(args[2]) : parseInt(args[1]);
-    if (!labGroupNb || labGroupNb > 3 || labGroupNb < 1) {
-        message.channel.send(`Il faut donner un numéro de section!`).then((msg) => {
-            setTimeout(() => msg.delete().catch(error), 5 * 1000)
-        });
+        const args = message.content.substring(1).split(" ");
+        const labGroupNb = args[2] ? parseInt(args[2]) : parseInt(args[1]);
+        if (!labGroupNb || labGroupNb > 3 || labGroupNb < 1) {
+            message.channel.send(`Il faut donner un numéro de section!`).then((msg) => {
+                setTimeout(() => msg.delete().catch(error), 5 * 1000)
+            });
+
+            message.delete().catch(error);
+            return;
+        }
+        currentLabGroup = labGroupNb;
+        queue = new PriorityQueue(queueComparator)
+
+        listTicketsEmbedStudent(message);
 
         message.delete().catch(error);
-        return;
+    } catch (err) {
+        error(err);
     }
-    currentLabGroup = labGroupNb;
-    queue = new PriorityQueue(queueComparator)
-
-    listTicketsEmbedStudent(message);
-
-    message.delete().catch(error);
 }
 
 /**
@@ -239,7 +249,7 @@ function autoListCommand(message) {
             setTimeout(() => message.delete().catch(error), 1000)
 
             message.channel.send("Aucune session est active").then((msg) => {
-                setTimeout(() => msg.delete().catch(error), 10 * 1000)
+                setTimeout(() => msg.delete().catch(error), 10 * 1000);
             });
 
             return;
@@ -258,39 +268,45 @@ function autoListCommand(message) {
  * @param {import('discord.js').Message<boolean>} message 
  */
 function endEmbedStudent(message) {
-    if (!hasAdminPermissions(message.member)) return;
+    try {
+        if (!hasAdminPermissions(message.member)) return;
 
-    sessionStarted = false;
-    log('Fin du TP ...');
+        sessionStarted = false;
+        log('Fin du TP ...');
 
-    if(lastEmbedMessageStudent) {
-        const embedContent = new MessageEmbed()
-	      .setColor('#a652bb')
-	      .setTitle(`${CLASS} Fin du TP`)
-	      .setDescription("Le TP est terminé et les questions ne sont plus possibles")
-	      .setThumbnail(message.guild.iconURL())
+        if(lastEmbedMessageStudent) {
+            const embedContent = new MessageEmbed()
+            .setColor('#a652bb')
+            .setTitle(`${CLASS} Fin du TP`)
+            .setDescription("Le TP est terminé et les questions ne sont plus possibles")
+            .setThumbnail(message.guild.iconURL())
 
-        embedContent.setTimestamp()
+            embedContent.setTimestamp()
 
-        lastEmbedMessageStudent.edit({ embeds: [embedContent] })
-            .then(msg => {
-                setTimeout(() => msg.delete().catch(error), 60 * 60 * 1000);
-            })
-    }
+            lastEmbedMessageStudent.edit({ embeds: [embedContent] })
+                .then(msg => {
+                    setTimeout(() => msg.delete().catch(error), 60 * 60 * 1000);
+                })
+        }
 
-    if(lastEmbedMessageAdmin) {
-        const embedContent = new MessageEmbed()
-	      .setColor('#0099ff')
-	      .setTitle(`${CLASS} Fin du TP`)
-	      .setDescription("Ce message va s'effacer automatiquement au bout de 1h")
-	      .setThumbnail(message.guild.iconURL())
+        if(lastEmbedMessageAdmin) {
+            const embedContent = new MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle(`${CLASS} Fin du TP`)
+            .setDescription("Ce message va s'effacer automatiquement au bout de 15min")
+            .setThumbnail(message.guild.iconURL())
 
-        embedContent.setTimestamp()
+            embedContent.setTimestamp()
 
-        lastEmbedMessageAdmin.edit({ embeds: [embedContent] })
-            .then(msg => {
-                setTimeout(() => msg.delete().catch(error), 60 * 60 * 1000);
-            })
+            lastEmbedMessageAdmin.edit({ embeds: [embedContent] })
+                .then(msg => {
+                    setTimeout(() => msg.delete().catch(error), 15 * 60 * 1000);
+                })
+        }
+        setTimeout(() => message.delete().catch(error), 10 * 1000)
+
+    } catch (err) {
+        error(err);
     }
 }
 
@@ -299,31 +315,35 @@ function endEmbedStudent(message) {
  * @param {import('discord.js').GuildMember} member 
  */
 function updateListTicketsEmbed(member) {
-    if (lastEmbedMessageAdmin) {
-        const embedContentAdmin = new MessageEmbed()
-	      .setColor('#0099ff')
-	      .setTitle(`${CLASS} File d'attente tickets`)
-	      .setDescription("La file d'attente des tickets se mettra à jour automatiquement ici, `➡️` pour passez au ticket suivant")
-	      .setThumbnail(member.guild.iconURL());
-
-        fillEmbedWithTickets(embedContentAdmin)
-
-        embedContentAdmin.setTimestamp()
-        lastEmbedMessageAdmin.edit({ embeds: [embedContentAdmin] });
-    }
-
-    if(lastEmbedMessageStudent && sessionStarted) {
-        const embedContentStudent = new MessageEmbed()
-	      .setColor('#a652bb')
-	      .setTitle(`${CLASS} TP en cours...`)
-	      .setDescription("La file d'attente des tickets se mettra à jour automatiquement ici")
-	      .setThumbnail(member.guild.iconURL());
-        
-        fillEmbedWithTickets(embedContentStudent)
-
-        embedContentStudent.setTimestamp()
-
-        lastEmbedMessageStudent.edit({ embeds: [embedContentStudent] });
+    try {
+        if (lastEmbedMessageAdmin) {
+            const embedContentAdmin = new MessageEmbed()
+              .setColor('#0099ff')
+              .setTitle(`${CLASS} File d'attente tickets`)
+              .setDescription("La file d'attente des tickets se mettra à jour automatiquement ici, `➡️` pour passez au ticket suivant")
+              .setThumbnail(member.guild.iconURL());
+    
+            fillEmbedWithTickets(embedContentAdmin)
+    
+            embedContentAdmin.setTimestamp()
+            lastEmbedMessageAdmin.edit({ embeds: [embedContentAdmin] });
+        }
+    
+        if(lastEmbedMessageStudent && sessionStarted) {
+            const embedContentStudent = new MessageEmbed()
+              .setColor('#a652bb')
+              .setTitle(`${CLASS} TP en cours...`)
+              .setDescription("La file d'attente des tickets se mettra à jour automatiquement ici")
+              .setThumbnail(member.guild.iconURL());
+            
+            fillEmbedWithTickets(embedContentStudent);
+    
+            embedContentStudent.setTimestamp();
+    
+            lastEmbedMessageStudent.edit({ embeds: [embedContentStudent] });
+        }
+    } catch (err) {
+        error(err);
     }
 }
 
@@ -332,24 +352,28 @@ function updateListTicketsEmbed(member) {
  * @param {import('discord.js').MessageEmbed} embed 
  */
 function fillEmbedWithTickets(embed) {
-    if (queue.isEmpty()) {
-        embed.addFields({
-            name: `Vide`,
-            value: 'Aucune question en attente !'
-        });
-        return;
+    try {
+        if (queue.isEmpty()) {
+            embed.addFields({
+                name: `Vide`,
+                value: 'Aucune question en attente !'
+            });
+            return;
+        }
+    
+        const queueValues = [];
+        while (!queue.isEmpty()) {
+            let val = queue.pop();
+            embed.addFields({
+                name: `Ticket `,
+                value: `Groupe ` + val[0]
+            });
+            queueValues.push(val);
+        }
+        queue.push(queueValues);
+    } catch (err) {
+        error(err);
     }
-
-    const queueValues = [];
-    while (!queue.isEmpty()) {
-        let val = queue.pop();
-        embed.addFields({
-            name: `Ticket `,
-            value: `Groupe ` + val[0]
-        });
-        queueValues.push(val);
-    }
-    queue.push(queueValues);
 }
 
 /**
@@ -357,21 +381,25 @@ function fillEmbedWithTickets(embed) {
  * @param {import('discord.js').Message<boolean>} message 
  */
 function listTicketsEmbedAdmin(message) {
-    const embedContent = new MessageEmbed()
-	  .setColor('#0099ff')
-	  .setTitle(`${CLASS} File d'attente tickets`)
-	  .setDescription("La file d'attente des tickets se mettra Ã  jour automatiquement ici, `➡️` pour passez au ticket suivant")
-      .setThumbnail(message.guild.iconURL());
+    try {
+        const embedContent = new MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle(`${CLASS} File d'attente tickets`)
+            .setDescription("La file d'attente des tickets se mettra Ã  jour automatiquement ici, `➡️` pour passez au ticket suivant")
+            .setThumbnail(message.guild.iconURL());
 
-    fillEmbedWithTickets(embedContent);
-    
-    embedContent.setTimestamp();
+        fillEmbedWithTickets(embedContent);
+        
+        embedContent.setTimestamp();
 
-    message.channel.send({ embeds: [embedContent] })
-        .then((msg) => {
-            lastEmbedMessageAdmin = msg;
-            msg.react('➡️')
-        });
+        message.channel.send({ embeds: [embedContent] })
+            .then((msg) => {
+                lastEmbedMessageAdmin = msg;
+                msg.react('➡️')
+            });
+    } catch (err) {
+        error(err);
+    }
 }
 
 /**
@@ -379,23 +407,27 @@ function listTicketsEmbedAdmin(message) {
  * @param {import('discord.js').Message<boolean>} message 
  */
 function listTicketsEmbedStudent(message) {
-    sessionStarted = true;
-    log("Debut du TP ...");
+    try {
+        sessionStarted = true;
+        log("Debut du TP ...");
 
-    const embedContent = new MessageEmbed()
-	  .setColor('#a652bb')
-	  .setTitle(`${CLASS} TP en cours ...`)
-	  .setDescription("La file d'attente des tickets se mettra a jour automatiquement ici")
-	  .setThumbnail(message.guild.iconURL());
+        const embedContent = new MessageEmbed()
+        .setColor('#a652bb')
+        .setTitle(`${CLASS} TP en cours ...`)
+        .setDescription("La file d'attente des tickets se mettra a jour automatiquement ici")
+        .setThumbnail(message.guild.iconURL());
 
-    fillEmbedWithTickets(embedContent);
+        fillEmbedWithTickets(embedContent);
 
-    embedContent.setTimestamp();
+        embedContent.setTimestamp();
 
-    message.channel.send({ embeds: [embedContent] })
-        .then((msg) => {
-            lastEmbedMessageStudent = msg;
-        });
+        message.channel.send({ embeds: [embedContent] })
+            .then((msg) => {
+                lastEmbedMessageStudent = msg;
+            }); 
+    } catch (err) {
+        error(err);
+    }
 }
 
 
@@ -409,8 +441,11 @@ function listTicketsEmbedStudent(message) {
  */
 function clearChannelCommand(message) {
     if (!hasAdminPermissions(message.member)) return;
-
-    message.channel.bulkDelete(100).then(messages => log(`Bulk deleted ${messages.size} messages`))
+    try {
+        message.channel.bulkDelete(100).then(messages => log(`Bulk deleted ${messages.size} messages`));
+    } catch (error) {
+        error(err);
+    }
 }
 
 /**
@@ -420,11 +455,15 @@ function clearChannelCommand(message) {
 function pongCommand(message) {
     if (!hasAdminPermissions(message.member)) return;
 
-    message.channel.send("Pong!").then((msg) => {
-        setTimeout(() => msg.delete().catch(error), 4000)
-    });
-
-    setTimeout(() => message.delete().catch(error), 4000)
+    try {
+        message.channel.send("Pong!").then((msg) => {
+            setTimeout(() => msg.delete().catch(error), 4000)
+        });
+    
+        setTimeout(() => message.delete().catch(error), 4000)
+    } catch (err) {
+        error(err);
+    }
 }
 
 
