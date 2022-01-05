@@ -5,6 +5,16 @@
 // Modified for the LOG2990 course
 // Author: Thomas Caron
 
+// Small express server used to host the bot on repl.it
+const express = require('express');
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => res.send('HelloWorld!'));
+
+app.listen(port, () => console.log('Listening on http://localhost:3000/'));
+
+// Bot code
 const path = require('path');
 const { Collection, Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]});
