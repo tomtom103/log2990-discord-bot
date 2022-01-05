@@ -47,7 +47,7 @@ class Logger {
     }
 }
 
-const logger = new Logger(path.join(__dirname, 'Logs.log'));
+const logger = new Logger(path.join(__dirname, '..', 'logs', 'Logs.log'));
 
 function log(text) {
     logger.log(text)
