@@ -11,9 +11,14 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_
 const isProd = process.env.NODE_ENV === 'production';
 require('dotenv').config({
     path: path.join(__dirname, isProd ? '.env' : '.env.dev')
-})
+});
 const { log, error } = require('./util/logger');
 const ON_DEATH = require('death');
+
+const {
+    DISCORD_TOKEN,
+    PREFIX
+} = process.env;
 
 const {
     helpCommand,
@@ -64,7 +69,7 @@ client.on("messageCreate", (message) => {
         commands.set('ping', (message) => pongCommand(message));
         commands.set('listChannels', (message) => listChannelsCommand(message));
         commands.set('autolist', (message) => autoListCommand(message));
-        commands.set('end', () => endEmbedStudent());
+        commands.set('end', (message) => endEmbedStudent(message));
 
         const command = commands.get(args[0]);
         if(command !== undefined) {

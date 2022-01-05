@@ -4,6 +4,8 @@ const { MessageEmbed } = require('discord.js');
 const { log, error } = require('./util/logger');
 const { PriorityQueue } = require('./util/priorityqueue');
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const {
     ID_ROLE_PROFESSEUR,
     ID_ROLE_CHARGE,
@@ -21,8 +23,28 @@ const adminRoles = [
 const defaultVoiceChannelId = isProd ? "926959608596164713" : "926959608596164713"
 const voiceChannelPrefix = "Salon ";
 
-const queue = new PriorityQueue();
+var queue;
 var sessionStarted = false;
+var currentLabGroup = 0;
+
+/**
+ * 
+ * @param {Number} a 
+ * @param {Number} b 
+ * @returns True if bigger a more urgent than b otherwise false.
+ */
+const queueComparator = (a, b) => {
+    if((a[0].toString()[0] === currentLabGroup.toString()) && (b[0].toString()[0] === currentLabGroup.toString())) {
+        // Default behaviour
+        return a[1] < b[1];
+    } else if ((a.toString()[0] === currentLabGroup.toString())) {
+        return true;
+    } else if ((b.toString()[0] === currentLabGroup.toString())) {
+        return false;
+    }
+    // Default behaviour
+    return a[1] < b[1];
+}
 
 /**
  * We need to keep embedMessages in memory
@@ -48,7 +70,7 @@ function helpCommand(message) {
         .setColor('#F8C300')
         .setTitle(`${CLASS}: Aide Commandes`)
         .setDescription('Commandes disponibles avec le bot: ')
-        .setThumbnail(currentGuild.iconURL())
+        .setThumbnail(message.guild.iconURL())
         .addFields(
             {name: `!ticket <numéro>`, value: `Indiquez votre numéro de groupe et vous serez dans la liste d'attente pour obtenir une réponse à votre question !`, inline: true},
             {name: `!list`, value: `Affiche la liste des questions en cours`, inline: true},
@@ -56,7 +78,7 @@ function helpCommand(message) {
             {name: `!autolist`, value: `Affiche la liste des questions en cours (mis à jour constamment)`, inline: true},
             {name: `!clear`, value: `Vide la liste d'attente des questions`, inline: true},
             {name: `!next`, value: `Vous dirige vers la conversation du prochain groupe pour gérer le ticket suivant en liste (résout le ticket automatiquement)`, inline: true},
-            {name: `!start`, value: `Débute le TP et affiche la liste des tickets (mis à jour constamment)`, inline: true},
+            {name: `!start <numéro>`, value: `Débute le TP pour la section <numéro> et affiche la liste des tickets (mis à jour constamment)`, inline: true},
             {name: `!end`, value: `Termine le TP et ferme la liste des tickets`, inline: true},
         );
     embedMessage.setTimestamp();
@@ -97,8 +119,8 @@ function ticketCommand(message) {
             return;
         }
 
-        queue.push(groupNb);
-        message.member.send(`Votre ticket est bien pris en compte, vous êtes en "${ticketList.length}" position`);
+        queue.push([[groupNb, Date.now()]]);
+        message.member.send(`Votre ticket est bien pris en compte, vous êtes en "${queue.size()}" position`);
         log(`Ticket ajouté au groupe ${groupNb}`);
         updateListTicketsEmbed(message.member);
         setTimeout(() => message.delete().catch(log), 1000);
@@ -124,12 +146,12 @@ function manageNextTicket(member) {
         return;
     }
 
-    let nbTicket = queue.pop();
+    let nbTicket = queue.pop()[0];
     if (member.voice.channel) {
         for (let value of member.guild.channels.cache.values()) {
             if (value.name === `${voiceChannelPrefix}${nbTicket}`) {
                 member.voice.setChannel(value);
-                log(`Joined channel: ${value.name}, ${ticketList.length} tickets left`);
+                log(`Joined channel: ${value.name}, ${queue.size()} tickets left`);
                 break;
             }
         }
@@ -137,6 +159,8 @@ function manageNextTicket(member) {
         member.user.send(`La prochaine équipe est: ${nbTicket}`);
         log(`User ${member.user.username} received ticket ${nbTicket}`);
     }
+
+    updateListTicketsEmbed(member);
 }
 
 /**
@@ -172,7 +196,7 @@ function manageNextTicketCommand(message) {
 
         setTimeout(() => message.delete().catch(error), 1000);
     } catch (err) {
-        error(err)
+        error(err);
     }
 }
 
@@ -182,6 +206,21 @@ function manageNextTicketCommand(message) {
  */
 function startSessionCommand(message) {
     if (!hasAdminPermissions(message.member)) return;
+
+    sessionStarted = true;
+
+    const args = message.content.substring(1).split(" ");
+    const labGroupNb = args[2] ? parseInt(args[2]) : parseInt(args[1]);
+    if (!labGroupNb || labGroupNb > 3 || labGroupNb < 1) {
+        message.channel.send(`Il faut donner un numéro de section!`).then((msg) => {
+            setTimeout(() => msg.delete().catch(error), 5 * 1000)
+        });
+
+        message.delete().catch(error);
+        return;
+    }
+    currentLabGroup = labGroupNb;
+    queue = new PriorityQueue(queueComparator)
 
     listTicketsEmbedStudent(message);
 
@@ -216,9 +255,9 @@ function autoListCommand(message) {
 
 /**
  * 
- * @returns 
+ * @param {import('discord.js').Message<boolean>} message 
  */
-function endEmbedStudent() {
+function endEmbedStudent(message) {
     if (!hasAdminPermissions(message.member)) return;
 
     sessionStarted = false;
@@ -229,7 +268,7 @@ function endEmbedStudent() {
 	      .setColor('#a652bb')
 	      .setTitle(`${CLASS} Fin du TP`)
 	      .setDescription("Le TP est terminé et les questions ne sont plus possibles")
-	      .setThumbnail(currentGuild.iconURL())
+	      .setThumbnail(message.guild.iconURL())
 
         embedContent.setTimestamp()
 
@@ -244,7 +283,7 @@ function endEmbedStudent() {
 	      .setColor('#0099ff')
 	      .setTitle(`${CLASS} Fin du TP`)
 	      .setDescription("Ce message va s'effacer automatiquement au bout de 1h")
-	      .setThumbnail(currentGuild.iconURL())
+	      .setThumbnail(message.guild.iconURL())
 
         embedContent.setTimestamp()
 
@@ -300,12 +339,17 @@ function fillEmbedWithTickets(embed) {
         });
         return;
     }
-    ticketList.forEach((val) => {
+
+    const queueValues = [];
+    while (!queue.isEmpty()) {
+        let val = queue.pop();
         embed.addFields({
             name: `Ticket `,
-            value: `Groupe ` + val
+            value: `Groupe ` + val[0]
         });
-    });
+        queueValues.push(val);
+    }
+    queue.push(queueValues);
 }
 
 /**
@@ -342,7 +386,7 @@ function listTicketsEmbedStudent(message) {
 	  .setColor('#a652bb')
 	  .setTitle(`${CLASS} TP en cours ...`)
 	  .setDescription("La file d'attente des tickets se mettra a jour automatiquement ici")
-	  .setThumbnail(currentGuild.iconURL());
+	  .setThumbnail(message.guild.iconURL());
 
     fillEmbedWithTickets(embedContent);
 
