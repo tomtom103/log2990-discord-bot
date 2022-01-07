@@ -119,10 +119,14 @@ function ticketCommand(message) {
         const args = message.content.split(" ");
         const groupNb = args[2] ? parseInt(args[2]) : parseInt(args[1]);
         if (isNaN(groupNb)) {
-            message.channel.send(errorMsg);
+            setTimeout(() => message.delete().catch(error), 1000);
+            message.channel.send(errorMsg).then((msg) => {
+                setTimeout(() => msg.delete().catch(error), 10 * 1000);
+            });;
             return;
         }
         if(!(_between(groupNb, 101, 112) || _between(groupNb, 201, 212) || _between(groupNb, 301, 312))) {
+            setTimeout(() => message.delete().catch(error), 1000);
             message.channel.send(`Le groupe ${groupNb} n'est pas un groupe valide, veuillez réessayer!`).then((msg) => {
                 setTimeout(() => msg.delete().catch(error), 10 * 1000);
             });
@@ -130,7 +134,11 @@ function ticketCommand(message) {
         }
 
         if (queue.contains(groupNb)) {
-            message.member.send("Vous avez déjà un tiquet en attente, veuillez attendre");
+            setTimeout(() => message.delete().catch(error), 1000);
+
+            message.member.send("Vous avez déjà un tiquet en attente, veuillez attendre").then((msg) => {
+                setTimeout(() => msg.delete().catch(error), 10 * 1000);
+            });
             return;
         }
 
