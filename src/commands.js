@@ -27,6 +27,10 @@ var queue;
 var sessionStarted = false;
 var currentLabGroup = 0;
 
+const _between = (x, min, max) => {
+    return x >= min && x <= max;
+}
+
 /**
  * 
  * @param {Number} a 
@@ -118,6 +122,13 @@ function ticketCommand(message) {
             message.channel.send(errorMsg);
             return;
         }
+        if(!(_between(groupNb, 101, 112) || _between(groupNb, 201, 212) || _between(groupNb, 301, 312))) {
+            message.channel.send(`Le groupe ${groupNb} n'est pas un groupe valide, veuillez réessayer!`).then((msg) => {
+                setTimeout(() => msg.delete().catch(error), 10 * 1000);
+            });
+            return;
+        }
+
         if (queue.contains(groupNb)) {
             message.member.send("Vous avez déjà un tiquet en attente, veuillez attendre");
             return;
