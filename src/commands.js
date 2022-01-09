@@ -156,6 +156,14 @@ function listCommand(message) {
  * 
  * @param {import('discord.js').Message<boolean>} message 
  */
+ function clearCommand(message) {
+
+ }
+
+/**
+ * 
+ * @param {import('discord.js').Message<boolean>} message 
+ */
 function ticketCommand(message) {
     const errorMsg = `La commande est invalide, il faut utiliser "${PREFIX}ticket <numero de groupe>"`;
 
@@ -559,5 +567,7 @@ module.exports = {
     listTicketsEmbedAdmin,
     listTicketsEmbedStudent,
     helpAdminCommand,
-    listCommand
+    listCommand,
+    clearCommand,
+    hasAdminPermissions
 }

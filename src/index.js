@@ -41,7 +41,9 @@ const {
     clearChannelCommand,
     pongCommand,
     helpAdminCommand,
-    listCommand
+    listCommand,
+    clearCommand,
+    hasAdminPermissions
 } = require('./commands')
 
 /**
@@ -78,8 +80,9 @@ client.on("messageCreate", (message) => {
         commands.set('ticket', (message) => ticketCommand(message));
         commands.set('next', (message) => manageNextTicketCommand(message));
         commands.set('start', (message) => startSessionCommand(message));
-        commands.set('clear', (message) => clearChannelCommand(message));
         commands.set('ping', (message) => pongCommand(message));
+        commands.set('clear', (message) => clearCommand(message));
+        commands.set('clearChannel', (message) => clearChannelCommand(message));
         commands.set('listChannels', (message) => listChannelsCommand(message));
         commands.set('autolist', (message) => autoListCommand(message));
         commands.set('end', (message) => endEmbedStudent(message));
@@ -98,7 +101,7 @@ client.on("messageReactionAdd", async (reaction, user) => {
     if (user.bot || !allowedBotChannelIds.includes(reaction.message.channel.id)) return;
     if(reaction.emoji.name == '➡️') {
         reaction.message.guild.members.fetch(user.id).then((member) => {
-            manageNextTicket(member);
+            if(hasAdminPermissions(member)) manageNextTicket(member);
         });
         reaction.message.reactions.resolve('➡️').users.remove(user.id);
     }
