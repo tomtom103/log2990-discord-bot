@@ -157,7 +157,30 @@ function listCommand(message) {
  * @param {import('discord.js').Message<boolean>} message 
  */
  function clearCommand(message) {
+    try {
+        if (!hasAdminPermissions(message.member)) return;
 
+        if (!sessionStarted) {
+            setTimeout(() => message.delete().catch(error), 1000);
+
+            message.channel.send("Aucune session est active").then((msg) => {
+                setTimeout(() => msg.delete().catch(error), 10 * 1000)
+            });
+
+            return;
+        }
+
+        while (!queue.isEmpty()) {
+            queue.pop();
+        }
+
+        updateListTicketsEmbed(message.member);
+
+        setTimeout(() => message.delete().catch(log), 1000);
+
+    } catch (err) {
+        error(err);
+    }
  }
 
 /**
