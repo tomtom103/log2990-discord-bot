@@ -39,7 +39,9 @@ const {
     autoListCommand,
     endEmbedStudent,
     clearChannelCommand,
-    pongCommand
+    pongCommand,
+    helpAdminCommand,
+    listCommand
 } = require('./commands')
 
 /**
@@ -72,6 +74,7 @@ client.on("messageCreate", (message) => {
         const commands = new Collection();
 
         commands.set('help', (message) => helpCommand(message));
+        commands.set('helpadmin', (message) => helpAdminCommand(message));
         commands.set('ticket', (message) => ticketCommand(message));
         commands.set('next', (message) => manageNextTicketCommand(message));
         commands.set('start', (message) => startSessionCommand(message));
@@ -80,6 +83,7 @@ client.on("messageCreate", (message) => {
         commands.set('listChannels', (message) => listChannelsCommand(message));
         commands.set('autolist', (message) => autoListCommand(message));
         commands.set('end', (message) => endEmbedStudent(message));
+        commands.set('list', (message) => listCommand(message));
 
         const command = commands.get(args[0]);
         if(command !== undefined) {

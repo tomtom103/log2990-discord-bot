@@ -77,14 +77,9 @@ function helpCommand(message) {
             .setDescription('Commandes disponibles avec le bot: ')
             .setThumbnail(message.guild.iconURL())
             .addFields(
-                {name: `!ticket <numéro>`, value: `Indiquez votre numéro de groupe et vous serez dans la liste d'attente pour obtenir une réponse à votre question !`, inline: true},
+                {name: `!ticket <numéro>`, value: `Indiquez votre numéro de groupe et vous serez ajoutés dans la liste d'attente pour obtenir une réponse à votre question !`, inline: true},
                 {name: `!list`, value: `Affiche la liste des questions en cours`, inline: true},
-                {name: `Liste des commandes administrateurs`, value: `Commandes réservées aux enseignants ci-dessous`},
-                {name: `!autolist`, value: `Affiche la liste des questions en cours (mis à jour constamment)`, inline: true},
-                {name: `!clear`, value: `Vide la liste d'attente des questions`, inline: true},
-                {name: `!next`, value: `Vous dirige vers la conversation du prochain groupe pour gérer le ticket suivant en liste (résout le ticket automatiquement)`, inline: true},
-                {name: `!start <numéro>`, value: `Débute le TP pour la section <numéro> et affiche la liste des tickets (mis à jour constamment)`, inline: true},
-                {name: `!end`, value: `Termine le TP et ferme la liste des tickets`, inline: true},
+                {name: `!help`, value: `Envoie ce message`, inline: true},
             );
         embedMessage.setTimestamp();
 
@@ -95,6 +90,65 @@ function helpCommand(message) {
         setTimeout(() => message.delete().catch(error), 1000);
     } catch (err) {
         error(err);
+    }
+}
+
+/**
+ * 
+ * @param {import('discord.js').Message<boolean>} message 
+ */
+ function helpAdminCommand(message) {
+    try {
+        const embedMessage = new MessageEmbed()
+            .setColor('#F8C300')
+            .setTitle(`${CLASS}: Aide Commandes Admin`)
+            .setDescription('Commandes disponibles avec le bot: ')
+            .setThumbnail(message.guild.iconURL())
+            .addFields(
+                {name: `!ticket <numéro>`, value: `Indiquez votre numéro de groupe et vous serez dans la liste d'attente pour obtenir une réponse à votre question !`, inline: true},
+                {name: `!list`, value: `Affiche la liste des questions en cours`, inline: true},
+                {name: `!help`, value: `Envoie un message d'aide pour les étudiants`, inline: true},
+                {name: `Liste des commandes administrateurs`, value: `Commandes réservées aux enseignants ci-dessous`},
+                {name: `!helpadmin`, value: `Envoie ce message`, inline: true},
+                {name: `!autolist`, value: `Affiche la liste des questions en cours (mis à jour constamment)`, inline: true},
+                {name: `!clear`, value: `Vide la liste d'attente des questions`, inline: true},
+                {name: `!next`, value: `Vous dirige vers la conversation du prochain groupe pour gérer le ticket suivant en liste (résout le ticket automatiquement)`, inline: true},
+                {name: `!start <numéro>`, value: `Débute le TP pour la section <numéro> et affiche la liste des tickets (mis à jour constamment)`, inline: true},
+                {name: `!end`, value: `Termine le TP et ferme la liste des tickets`, inline: true},
+            );
+        embedMessage.setTimestamp();
+
+        message.channel.send({ embeds: [embedMessage]});
+
+        setTimeout(() => message.delete().catch(error), 1000);
+    } catch (err) {
+        error(err);
+    }
+}
+
+/**
+ * 
+ * @param {import('discord.js').Message<boolean>} message 
+ */
+function listCommand(message) {
+    try {
+        if (!sessionStarted) {
+            setTimeout(() => message.delete().catch(error), 1000);
+
+            message.channel.send("Aucune session est active").then((msg) => {
+                setTimeout(() => msg.delete().catch(error), 10 * 1000)
+            });
+
+            return;
+        }
+
+        listTicketsEmbedStudent(message);
+
+        setTimeout(() => message.delete().catch(log), 1000);
+
+    } catch (err) {
+        error(err);
+        message.member.send(errorMsg);
     }
 }
 
@@ -499,5 +553,7 @@ module.exports = {
     updateListTicketsEmbed,
     fillEmbedWithTickets,
     listTicketsEmbedAdmin,
-    listTicketsEmbedStudent
+    listTicketsEmbedStudent,
+    helpAdminCommand,
+    listCommand
 }
