@@ -62,10 +62,6 @@ client.on("ready", () => {
 
 client.on("messageCreate", (message) => {
     try {
-        if(allowedBotThreadChannelIds.includes(message.channel.id)) {
-            startAutomaticThread(message);
-        }
-
         if ((!allowedBotChannelIds.includes(message.channel.id)) ||
             (message.guild === null) || 
             (!message.content.startsWith(PREFIX))) return;
