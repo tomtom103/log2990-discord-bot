@@ -496,7 +496,11 @@ function listTicketsEmbedStudent(message, fromListCommand = false) {
 
         message.channel.send({ embeds: [embedContent] })
             .then((msg) => {
-                if (!fromListCommand) lastEmbedMessageStudent = msg;
+                if (!fromListCommand) {
+                    lastEmbedMessageStudent = msg;
+                } else {
+                    setTimeout(() => msg.delete().catch(error), 2 * 60 * 1000);
+                }
             }); 
     } catch (err) {
         error(err);
