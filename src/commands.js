@@ -142,7 +142,7 @@ function listCommand(message) {
             return;
         }
 
-        listTicketsEmbedStudent(message);
+        listTicketsEmbedStudent(message, true);
 
         setTimeout(() => message.delete().catch(log), 1000);
 
@@ -479,7 +479,7 @@ function listTicketsEmbedAdmin(message) {
  * 
  * @param {import('discord.js').Message<boolean>} message 
  */
-function listTicketsEmbedStudent(message) {
+function listTicketsEmbedStudent(message, fromListCommand = false) {
     try {
         sessionStarted = true;
         log("Debut du TP ...");
@@ -496,7 +496,7 @@ function listTicketsEmbedStudent(message) {
 
         message.channel.send({ embeds: [embedContent] })
             .then((msg) => {
-                lastEmbedMessageStudent = msg;
+                if (!fromListCommand) lastEmbedMessageStudent = msg;
             }); 
     } catch (err) {
         error(err);

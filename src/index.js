@@ -55,12 +55,6 @@ const allowedBotChannelIds =
         "927644378632171543",
     ];
 
-const allowedBotThreadChannelIds = [
-    "926959608298356750",
-    "926959608298356751",
-    "926959608298356753",
-];
-
 client.on("ready", () => {
     log("Starting bot...");
     log(`Logged in as ${client.user.tag}!`);
@@ -115,20 +109,6 @@ client.on("messageReactionAdd", async (reaction, user) => {
 })
 
 client.login(DISCORD_TOKEN);
-
-/**
- * 
- * @param {import('discord.js').Message<boolean>} message 
- */
-function startAutomaticThread(message) {
-    const roleName = message.member.roles.highest.name;
-    if (!message.hasThread) {
-        message.startThread({
-            name: `${roleName}`,
-            autoArchiveDuration: 'MAX',
-        });
-    }
-}
 
 ON_DEATH((signal, err) => {
     log('KILLED, cleaning up')
