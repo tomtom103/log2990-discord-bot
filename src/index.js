@@ -17,7 +17,7 @@ app.listen(port, () => console.log('Listening on http://localhost:3000/'));
 // Bot code
 const path = require('path');
 const { Collection, Client, Intents } = require('discord.js');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS]});
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.GUILD_VOICE_STATES]});
 const isProd = process.env.NODE_ENV === 'production';
 require('dotenv').config({
     path: path.join(__dirname, isProd ? '.env' : '.env.dev')

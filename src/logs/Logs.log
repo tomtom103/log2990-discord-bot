@@ -77,3 +77,6 @@
 {"level":"info","message":"16:57 - 17:1:2022 | Info: User thom wrote: !ticket 201"}
 {"level":"info","message":"16:57 - 17:1:2022 | Info: Ticket ajouté au groupe 201"}
 {"level":"info","message":"16:57 - 17:1:2022 | Info: User thom received ticket 201"}
+{"level":"info","message":"17:5 - 17:1:2022 | Info: KILLED, cleaning up"}
+{"level":"info","message":"17:5 - 17:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"17:5 - 17:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
