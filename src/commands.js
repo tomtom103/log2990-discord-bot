@@ -210,7 +210,7 @@ function ticketCommand(message) {
             });;
             return;
         }
-        if(!(_between(groupNb, 101, 112) || _between(groupNb, 201, 212) || _between(groupNb, 301, 312))) {
+        if(!(_between(groupNb, 101, 112) || _between(groupNb, 201, 214) || _between(groupNb, 301, 312))) {
             setTimeout(() => message.delete().catch(error), 1000);
             message.channel.send(`Le groupe ${groupNb} n'est pas un groupe valide, veuillez réessayer!`).then((msg) => {
                 setTimeout(() => msg.delete().catch(error), 10 * 1000);
@@ -231,7 +231,6 @@ function ticketCommand(message) {
         message.member.send(`Votre ticket est bien pris en compte, vous êtes en "${queue.size()}" position`);
         log(`Ticket ajouté au groupe ${groupNb}`);
         updateListTicketsEmbed(message.member);
-        setTimeout(() => message.delete().catch(log), 1000);
 
     } catch (err) {
         error(err);

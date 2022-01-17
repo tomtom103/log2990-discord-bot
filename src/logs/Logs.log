@@ -11,3 +11,69 @@
 {"level":"info","message":"15:58 - 9:1:2022 | Info: Starting bot..."}
 {"level":"info","message":"15:58 - 9:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
 {"level":"info","message":"15:59 - 9:1:2022 | Info: KILLED, cleaning up"}
+{"level":"info","message":"21:27 - 9:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"21:27 - 9:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"21:34 - 9:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"21:34 - 9:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"0:16 - 10:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"0:16 - 10:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"3:1 - 10:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"3:1 - 10:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"22:4 - 10:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"22:4 - 10:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"4:59 - 11:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"4:59 - 11:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"12:24 - 11:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"12:24 - 11:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"1:54 - 12:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"1:54 - 12:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"1:34 - 13:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"1:34 - 13:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"14:29 - 13:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"14:29 - 13:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"2:9 - 14:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"2:9 - 14:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"21:27 - 14:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"21:27 - 14:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"23:4 - 14:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"23:4 - 14:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"0:54 - 15:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"0:54 - 15:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"21:39 - 15:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"21:39 - 15:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"11:59 - 16:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"11:59 - 16:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"15:24 - 16:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"15:24 - 16:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"10:49 - 17:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"10:49 - 17:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"11:9 - 17:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"11:9 - 17:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"14:34 - 17:1:2022 | Info: User Sami Sadfa wrote: !start 1"}
+{"level":"info","message":"14:34 - 17:1:2022 | Info: Debut du TP ..."}
+{"level":"info","message":"14:36 - 17:1:2022 | Info: User thom wrote: !end"}
+{"level":"info","message":"14:36 - 17:1:2022 | Info: Fin du TP ..."}
+{"level":"info","message":"14:36 - 17:1:2022 | Info: User thom wrote: !start 1"}
+{"level":"info","message":"14:36 - 17:1:2022 | Info: Debut du TP ..."}
+{"level":"info","message":"14:38 - 17:1:2022 | Info: User thom wrote: !autolist"}
+{"level":"error","message":"15:36 - 17:1:2022 | Error: DiscordAPIError: Unknown Message"}
+{"level":"info","message":"16:42 - 17:1:2022 | Info: User Le Jon wrote: !ticket 110"}
+{"level":"info","message":"16:42 - 17:1:2022 | Info: Ticket ajouté au groupe 110"}
+{"level":"info","message":"16:44 - 17:1:2022 | Info: User ewald wrote: !ticket 110"}
+{"level":"info","message":"16:44 - 17:1:2022 | Info: Ticket ajouté au groupe 110"}
+{"level":"info","message":"16:45 - 17:1:2022 | Info: User Sami Sadfa wrote: !list"}
+{"level":"info","message":"16:45 - 17:1:2022 | Info: Debut du TP ..."}
+{"level":"info","message":"16:46 - 17:1:2022 | Info: User goush received ticket 110"}
+{"level":"info","message":"16:46 - 17:1:2022 | Info: User goush wrote: !help"}
+{"level":"info","message":"16:46 - 17:1:2022 | Info: User thom wrote: !helpadmin"}
+{"level":"info","message":"16:47 - 17:1:2022 | Info: User goush wrote: !next"}
+{"level":"info","message":"16:47 - 17:1:2022 | Info: User goush received ticket 110"}
+{"level":"info","message":"16:53 - 17:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"16:53 - 17:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"16:56 - 17:1:2022 | Info: User thom wrote: !ticket 201"}
+{"level":"info","message":"16:56 - 17:1:2022 | Info: User thom wrote: !start 1"}
+{"level":"info","message":"16:56 - 17:1:2022 | Info: Debut du TP ..."}
+{"level":"info","message":"16:56 - 17:1:2022 | Info: User thom wrote: !autolist"}
+{"level":"info","message":"16:57 - 17:1:2022 | Info: User thom wrote: !ticket 201"}
+{"level":"info","message":"16:57 - 17:1:2022 | Info: Ticket ajouté au groupe 201"}
+{"level":"info","message":"16:57 - 17:1:2022 | Info: User thom received ticket 201"}

@@ -35,7 +35,7 @@ class PriorityQueue {
     return poppedValue;
   }
   contains(value) {
-      return this._heap.includes(value);
+      return this._heap.map((e) => { return e[0] }).indexOf(value) !== -1;
   }
   replace(value) {
     const replacedValue = this.peek();
