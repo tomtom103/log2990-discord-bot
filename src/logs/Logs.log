@@ -80,3 +80,20 @@
 {"level":"info","message":"17:5 - 17:1:2022 | Info: KILLED, cleaning up"}
 {"level":"info","message":"17:5 - 17:1:2022 | Info: Starting bot..."}
 {"level":"info","message":"17:5 - 17:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"17:6 - 17:1:2022 | Info: User thom wrote: !ticket 201"}
+{"level":"info","message":"17:6 - 17:1:2022 | Info: User thom wrote: !start 1"}
+{"level":"info","message":"17:6 - 17:1:2022 | Info: Debut du TP ..."}
+{"level":"info","message":"17:6 - 17:1:2022 | Info: User thom wrote: !autolist"}
+{"level":"info","message":"17:6 - 17:1:2022 | Info: User thom wrote: !ticket 201"}
+{"level":"info","message":"17:6 - 17:1:2022 | Info: Ticket ajouté au groupe 201"}
+{"level":"info","message":"17:7 - 17:1:2022 | Info: Joined channel: équipe-201, 0 tickets left"}
+{"level":"info","message":"17:7 - 17:1:2022 | Info: Joined channel: Salon privé 1, 0 tickets left"}
+{"level":"info","message":"17:8 - 17:1:2022 | Info: User CovidSpaghet wrote: !ticket 109"}
+{"level":"info","message":"17:8 - 17:1:2022 | Info: Ticket ajouté au groupe 109"}
+{"level":"info","message":"17:11 - 17:1:2022 | Info: User Sami Sadfa wrote: !next"}
+{"level":"info","message":"17:11 - 17:1:2022 | Info: Joined channel: équipe-109, 0 tickets left"}
+{"level":"info","message":"17:13 - 17:1:2022 | Info: Starting bot..."}
+{"level":"info","message":"17:13 - 17:1:2022 | Info: Logged in as LOG2990 Bot#4588!"}
+{"level":"info","message":"17:13 - 17:1:2022 | Info: User thom wrote: !start 1"}
+{"level":"info","message":"17:13 - 17:1:2022 | Info: Debut du TP ..."}
+{"level":"info","message":"17:13 - 17:1:2022 | Info: User thom wrote: !autolist"}

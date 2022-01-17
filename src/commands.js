@@ -231,7 +231,7 @@ function ticketCommand(message) {
         message.member.send(`Votre ticket est bien pris en compte, vous êtes en "${queue.size()}" position`);
         log(`Ticket ajouté au groupe ${groupNb}`);
         updateListTicketsEmbed(message.member);
-
+        setTimeout(() => message.delete().catch(error), 20 * 60 * 1000);
     } catch (err) {
         error(err);
         message.member.send(errorMsg);
